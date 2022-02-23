@@ -40,7 +40,7 @@ table2 = dash_table.DataTable(ytn.to_dict('records'),
 ######################Graph layout ###########################
 graph1 = dcc.Graph(
     id = 'graph1',
-    figure = fig, style = {'width':'40%', 'display':'inline-block'}
+    figure = fig
 )
 
 ####################################################
@@ -54,7 +54,7 @@ first = html.Div([dcc.Markdown([markdown_text])],
                  style = {'color':'Black', 'fontSize':15, 'txtAlign':'center', 'background-color':'white', 'font-family':'courier'})
 
 markdown_text1 = """ ### General Findings
-##### Netflix is downright convenient. But where is it the best value?
+\n ##### Netflix is downright convenient. But where is it the best value?
 \n Here we find some price disparity between countries. When prices are converted to USD, we can see that Liechtenstein and Switzerland have
 the priciest subscription cost. Liechtenstien has it worse while having the smaller library size.
 \n Turkey has the best value with the lower subscription cost.""" 
