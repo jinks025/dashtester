@@ -29,6 +29,13 @@ fig = px.choropleth(df, locations="country code",
 
 fig.update_traces(locationmode='Country', selector=dict(type='scattergeo'))
 
+###########DashTable#############
+table1 = dash_table.DataTable(ytz.to_dict('records'),
+                             [{'name':i, 'id':i} for i in ytz.columns])  #### top 10
+
+table2 = dash_table.DataTable(ytn.to_dict('records'),
+                             [{'name':i, 'id':i} for i in ytn.columns])  #### bottom 10
+
 ######################Graph layout ###########################
 graph1 = dcc.Graph(
     id = 'graph1',
@@ -65,16 +72,14 @@ SIDEBAR_STYLE1 = SIDEBAR_STYLE
 # content
 header = html.Div(children = [s])
 graphshere = html.Div(children = [graph1, first])
-indicators = html.Div(children = [])
-markdowns = html.Div([])
-comgraph = html.Div(children = [])
+indicators = html.Div(children = [second, thrid])
+comgraph = html.Div(children = [table1, table2], style = {'display':'inline-block'})
 
 kotak_utama1 = html.Div([
     header,
     graphshere,
     indicators,
-    comgraph, 
-    markdowns], id='main box1',
+    comgraph], id='main box1',
     style=BOX_STYLE1
 )
 
