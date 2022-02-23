@@ -25,7 +25,8 @@ fig = px.choropleth(df, locations="country code",
                     hover_data = ['# of TV Shows', '# of Movies', 'Total Library Size'],
                     title = "Netflix prices per country",                 
                     color_continuous_scale='Portland',
-                    range_color = (0,10))
+                    range_color = (0,10), 
+                    margin = dict(t = 0, b=0, l = 0, r = 0))
 
 fig.update_traces(locationmode='Country', selector=dict(type='scattergeo'))
 
@@ -39,7 +40,7 @@ table2 = dash_table.DataTable(ytn.to_dict('records'),
 ######################Graph layout ###########################
 graph1 = dcc.Graph(
     id = 'graph1',
-    figure = fig
+    figure = fig, style = {'width':'40%', 'display':'inline-block'}
 )
 
 ####################################################
@@ -50,20 +51,20 @@ markdown_text = ''' ### Netflix bang for your buck
 \n #### This page shows the current subscription prices for Netflix by country.
 \n The map and tables below shows where you get the best bang for your buck.''' 
 first = html.Div([dcc.Markdown([markdown_text])],
-                 style = {'color':'Black', 'fontSize':20, 'txtAlign':'center', 'background-color':'white', 'font-family':'courier'})
+                 style = {'color':'Black', 'fontSize':15, 'txtAlign':'center', 'background-color':'white', 'font-family':'courier'})
 
 markdown_text1 = """ ### General Findings
-#####Netflix is downright convenient. But where is it the best value?
+##### Netflix is downright convenient. But where is it the best value?
 \n Here we find some price disparity between countries. When prices are converted to USD, we can see that Liechtenstein and Switzerland have
 the priciest subscription cost. Liechtenstien has it worse while having the smaller library size.
 \n Turkey has the best value with the lower subscription cost.""" 
 second = html.Div([dcc.Markdown([markdown_text1])], 
-                  style = {'color':'Black', 'fontSize':20, 'txtAlign':'center', 'background-color':'white', 'font-family':'courier'})
+                  style = {'color':'Black', 'fontSize':15, 'txtAlign':'center', 'background-color':'white', 'font-family':'courier'})
 
 markdown_text2 = ''' ### News
 In January 2022, Netflix announced price hikes in the US and Canada. Netflix also announced that it was lowering prices in India to compete with Amazon Prime and Disney+.'''
 thrid = html.Div([dcc.Markdown([markdown_text2])],
-                style = {'color':'Black', 'fontSize':20, 'txtAlign':'center', 'background-color':'white', 'font-family':'courier'})
+                style = {'color':'Black', 'fontSize':15, 'txtAlign':'center', 'background-color':'white', 'font-family':'courier'})
 
 ####################################################
 BOX_STYLE1 = KOTAK_UTAMA_STYLE
@@ -73,7 +74,7 @@ SIDEBAR_STYLE1 = SIDEBAR_STYLE
 header = html.Div(children = [s])
 graphshere = html.Div(children = [graph1, first])
 indicators = html.Div(children = [second, thrid])
-comgraph = html.Div(children = [table1, table2], style = {'display':'inline-block'})
+comgraph = html.Div(children = [table1, table2], style = {'width':'35%','display':'inline-block'})
 
 kotak_utama1 = html.Div([
     header,
