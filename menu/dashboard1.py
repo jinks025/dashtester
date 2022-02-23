@@ -13,84 +13,21 @@ import numpy as np
 import plotly.express as px
 
 #######Dataframes##########
-df = pd.read_csv('Netflix2.csv')
+df = pd.read_csv('Netflix codes.csv')
+
+ytz = df.sort_values(by = ['Price USD'], ascending = True).head(10) ## top 10 -- lowest
+ytn = df.sort_values(by = ['Price USD'], ascending = False).head(10) ## bottom 10 -- highest
 
 ####### Graphs #########
+fig = px.choropleth(df, locations="country code",
+                    color="Price USD",
+                    hover_name="Country",
+                    hover_data = ['# of TV Shows', '# of Movies', 'Total Library Size'],
+                    title = "Netflix prices per country",                 
+                    color_continuous_scale='Portland',
+                    range_color = (0,10))
 
-
-######
-fig1 = make_subplots(specs = [[{'secondary_y':True}]])
-fig1.add_trace(go.Scatter(x = cop1.index, y = cop1.Close, mode = 'lines', name = 'Copper prices / lbs COMEX'), secondary_y = False)
-fig1.add_trace(go.Scatter(x = cpi.Date, y = cpi.Inflation, mode = 'lines', name = 'U.S. Inflation Rate'), secondary_y=True)
-fig1.update_layout(title_text = 'Copper prices vs Inflation') 
-fig1.update_layout(yaxis1 = dict(title = '<b>Copper<b> Comex price per lbs'), 
-                   yaxis2 = dict(title = '<b>Inflation<b> rate'))
-####
-snsmap = pd.concat([cop1,dol1, dow1, ng1, oil1])
-snsp = pd.pivot_table(snsmap, index = 'Date', columns = 'stock', values = ['Close', 'Open', 'Low'])
-snsp.columns = snsp.columns.map(lambda x: '|'.join([str(i) for i in x]))
-fig2 = px.imshow(snsp.corr(), color_continuous_scale='Jet') #, annot = True)
-####
-fig3 = make_subplots(specs = [[{'secondary_y':True}]])
-fig3.add_trace(go.Scatter(x = al1.index, y = al1.Close, mode = 'lines', name = 'Aluminum Prices per ton'), secondary_y = False)
-fig3.add_trace(go.Scatter(x = cpi.Date, y = cpi.Inflation, mode = 'lines', name = 'U.S. Inflation Rate'), secondary_y=True)
-fig3.update_layout(title_text = 'Aluminum prices vs Inflation') 
-fig3.update_layout(yaxis1 = dict(title = '<b>Copper<b> Comex price per lbs'), 
-                   yaxis2 = dict(title = '<b>Inflation<b> rate'))
-####
-live = go.Figure()
-live.add_trace(go.Indicator(
-    mode='number+delta',
-    value= si.get_live_price('HG=F'),
-    number={'prefix': '$'},
-    delta={'position': 'top', 'reference':cop.Close.iloc[-2], 'relative': True},
-    title={'text': 'Price of Copper On COMEX<br><span style="font-size:0.8em;color:gray"> Current Price per lbs </span><br><span style="font-size:0.8em;color:gray"> (Change reflects previous close value)</span>'}))
-live.update_layout(autosize = False, width=400, height =300)
-
-####
-
-live1 = go.Figure()
-live1.add_trace(go.Indicator(
-    mode='number+delta',
-    value= si.get_live_price('CL=F'),
-    number={'prefix': '$'},
-    delta={'position': 'top', 'reference': oil.Close.iloc[-2], 'relative': True},
-    title={'text': 'Price of Oil Futures<br><span style="font-size:0.8em;color:gray"> Current Price per barrel</span><br><span style="font-size:0.8em;color:gray"> (Change reflects previous close value)</span>'}))
-live1.update_layout(autosize = False, width=400, height =300)
-
-####
-
-live2 = go.Figure()
-live2.add_trace(go.Indicator(
-    mode='number+delta',
-    value=  si.get_live_price('ALI=F'),
-    number={'prefix': '$'},
-    delta={'position': 'top', 'reference': al.Close.iloc[-2], 'relative': True},
-    title={'text': 'Price of Aluminum<br><span style="font-size:0.8em;color:gray"> Current Price per ton </span><br><span style="font-size:0.8em;color:gray"> (Change reflects previous close value)</span>'}))
-live2.update_layout(autosize = False, width=400, height =300)
-
-####
-
-live3 = go.Figure()
-live3.add_trace(go.Indicator(
-    mode='number+delta',
-    value= si.get_live_price('NG=F'),
-    number={'prefix': '$'},
-    delta={'position': 'top', 'reference': ng.Close.iloc[-2], 'relative': True},
-    title={'text': 'Price of Natural Gas<br><span style="font-size:0.8em;color:gray"> Current Price $ per MMBtu </span><br><span style="font-size:0.8em;color:gray"> (Change reflects previous close value)</span>'}))
-live3.update_layout(autosize = False, width=400, height =300)
-
-
-####
-
-live4 = go.Figure()
-live4.add_trace(go.Indicator(
-    mode='number+delta',
-    value=si.get_live_price('DX-Y.NYB'),
-    number={'prefix': '$'},
-    delta={'position': 'top', 'reference': ng.Close.iloc[-2], 'relative': True},
-    title={'text': 'Dollar Strength<br><span style="font-size:0.8em;color:gray"> Index</span><br><span style="font-size:0.8em;color:gray"> (Change reflects previous close value)</span>'}))
-live4.update_layout(autosize = False, width=400, height =300)
+fig.update_traces(locationmode='Country', selector=dict(type='scattergeo'))
 
 ######################Graph layout ###########################
 graph1 = dcc.Graph(
@@ -98,70 +35,28 @@ graph1 = dcc.Graph(
     figure = fig
 )
 
-graph2 = dcc.Graph(
-    id = 'graph2',
-    figure = live, style={'display': 'inline-block'}
-)
-
-graph3 = dcc.Graph(
-    id = 'graph3',
-    figure = live1, style={'display': 'inline-block'}
-)
-
-graph4 = dcc.Graph(
-    id = 'graph4',
-    figure = fig1, style={'display': 'inline-block'}
-)
-                                  
-graph5 = dcc.Graph(
-    id = 'graph5',
-    figure = live2, style={'display': 'inline-block'}
-)
-
-graph6 = dcc.Graph(
-    id = 'graph6',
-    figure = live3, style={'display': 'inline-block'}
-)
-
-graph7 = dcc.Graph(
-    id = 'graph7',
-    figure = live4, style={'display': 'inline-block'}
-)
-
-graph8 = dcc.Graph(
-    id = 'graph8',
-    figure = fig2, style={'display': 'inline-block'}
-)
-
-graph9 = dcc.Graph(
-    id = 'graph9',
-    figure = fig3, style={'display': 'inline-block'}
-)
 ####################################################
-s = html.H1(date.today(), 
+s = html.H1('Netflix Subscription Prices By Country', 
             style = {'color':'white', 'fontSize':50, 'txtAlign':'center', 'background-color':'Black', 'font-family':'courier'})
 ####################################################
-markdown_text = ''' ### Copper Prices vs Inflation
-This page shows the current state of the market for the past 30 days (today's market activity is not included). However, 
-prices with the indicators, are live market prices with each time you refresh the page.''' 
+markdown_text = ''' ### Netflix bang for your buck 
+\n #### This page shows the current subscription prices for Netflix by country.
+\n The map and tables below shows where you get the best bang for your buck.''' 
+first = html.Div([dcc.Markdown([markdown_text])],
+                 style = {'color':'Black', 'fontSize':20, 'txtAlign':'center', 'background-color':'white', 'font-family':'courier'})
 
 markdown_text1 = """ ### General Findings
-The cost of goods and services determines the value of the dollar. The Federal Reserve pursues a stable inflation rate (~2%) and maximum-employment. 
-Unemployment usually has a natural rate at around 3%. Comparing commoditiy prices to the dollar strength, in history, they have an inverse relationship. 
-Inventory of copper plays a role in the valuation as well. In the heat map above, (red and blue chart), shows the relationship bewteen the price of copper 
-and the USD. A '1' value is expected when the values are highly correlated (in this case the prices are highly correlated with themselves), a '0' value 
-means there is no relation between the variables, and a value in the negative (as shown on this graph) shows an inverse correlation. The value between copper
-and the USE is -0.71, not 1.00, but the correlation is there.""" 
+#####Netflix is downright convenient. But where is it the best value?
+\n Here we find some price disparity between countries. When prices are converted to USD, we can see that Liechtenstein and Switzerland have
+the priciest subscription cost. Liechtenstien has it worse while having the smaller library size.
+\n Turkey has the best value with the lower subscription cost.""" 
+second = html.Div([dcc.Markdown([markdown_text1])], 
+                  style = {'color':'Black', 'fontSize':20, 'txtAlign':'center', 'background-color':'white', 'font-family':'courier'})
 
-markdown_text2 = ''' ### News/speculations
-Recent downturns in copper prices(10-20-2021:11-08-2021) would have to do with news out of China. Recent energy shortage and fears of a slowing Chinese economy
-has slowed the rise in costs.
-* 11/8/2021 - Aluminum prices fall from slowing auto sales in China last month. Alcola will restart an aluminum in Australia to increase supply.'''
-
-markdown_text3 = '''### Economic 
-A stronger dollar is correlated with lower priced copper. Looking at the graphs, this continues to hold true with the correlation being -0.7. 
-We will need to keep an eye on inflation to keep up with costs. Federal Reserve is holding inflation is transitory.'''
-
+markdown_text2 = ''' ### News
+In January 2022, Netflix announced price hikes in the US and Canada. Netflix also announced that it was lowering prices in India to compete with Amazon Prime and Disney+.'''
+thrid = html.Div([dcc.Markdown([markdown_text2])],
+                style = {'color':'Black', 'fontSize':20, 'txtAlign':'center', 'background-color':'white', 'font-family':'courier'})
 
 ####################################################
 BOX_STYLE1 = KOTAK_UTAMA_STYLE
@@ -169,11 +64,10 @@ SIDEBAR_STYLE1 = SIDEBAR_STYLE
 
 # content
 header = html.Div(children = [s])
-graphshere = html.Div(children = [graph1])
-indicators = html.Div(children = [graph2, graph3, graph5, graph6, graph7])
-markdowns = html.Div([dcc.Markdown(children = [markdown_text, markdown_text1, markdown_text2, markdown_text3])],
-                    style = {'color':'Black', 'fontSize':20, 'txtAlign':'center', 'background-color':'white', 'font-family':'courier'})
-comgraph = html.Div(children = [graph4,graph8, graph9])
+graphshere = html.Div(children = [graph1, first])
+indicators = html.Div(children = [])
+markdowns = html.Div([])
+comgraph = html.Div(children = [])
 
 kotak_utama1 = html.Div([
     header,
