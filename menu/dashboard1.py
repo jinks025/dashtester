@@ -8,64 +8,15 @@ from menu.style import *
 from app import app, server
 import datetime
 from datetime import date
-import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
-import pandas_datareader.data as web
-import pandas_ta as ta
-import yfinance as yf
-import seaborn as sns
-yf.pdr_override()
-import cufflinks as cf
-import plotly.graph_objects as go
-from datetime import date
+import numpy as np 
 import plotly.express as px
-from yahoo_fin import stock_info as si
-from plotly.subplots import make_subplots
 
-##########TIMEFRAME###########
-start = datetime.datetime.now() - datetime.timedelta(30)
-start1 = '2018-01-01'
-end = date.today()
 #######Dataframes##########
-sp = yf.download('^GSPC', start=start, end=end)
-nas = yf.download('^IXIC', start=start, end=end)
-
-dow1 = yf.download('DOW', start=start1, end=end)
-dow1['stock'] = 'Dow Jones'
-dow = dow1.loc[dow1.index >=start]
-
-cop1 = yf.download('HG=F', start=start1, end=end)    #, period = '1d', interval = '5m')
-cop1['stock'] = 'Copper'
-cop = cop1.loc[cop1.index >= start]
-
-oil1 = yf.download('CL=F', start=start1, end=end) 
-oil1['stock'] = 'Oil'
-oil = oil1.loc[oil1.index >= start]
-
-al1 = yf.download('ALI=F', start=start1, end=end)
-al1['stock'] = 'Aluminum'
-al = al1.loc[al1.index >= start]
-
-ng1 = yf.download('NG=F', start=start, end=end)
-ng1['stock'] = 'Natural Gas'
-ng = ng1.loc[ng1.index>=start]
-
-dol1 = yf.download('DX-Y.NYB', start=start1, end=end)
-dol1['stock'] = 'USD'
-dol = dol1.loc[dol1.index >=start]
-
-cpi = pd.read_excel('plastic info.xlsx', sheet_name = 'CPI')
+df = pd.read_csv('Netflix2.csv')
 
 ####### Graphs #########
-fig = make_subplots(rows = 2, cols = 2, 
-                   subplot_titles = ('S&P 500', 'NASDAQ', 'DOW JONES Ind Avg', 'Copper COMEX'))
-fig['layout']['margin'] = {'l':30, 'r':10, 'b':50, 't':25}
-fig.append_trace(go.Candlestick(x = sp.index, open=sp.Open, high=sp.High, low=sp.Low, close=sp.Close), 1, 1) 
-fig.append_trace(go.Candlestick(x=nas.index,open=nas.Open, high=nas.High, low=nas.Low, close=nas.Close), 2,1) 
-fig.append_trace(go.Candlestick(x=dow.index,open=dow.Open, high=dow.High, low=dow.Low, close=dow.Close), 1,2) 
-fig.append_trace(go.Candlestick(x=cop.index,open=cop.Open, high=cop.High, low=cop.Low, close=cop.Close), 2,2) 
-fig.update_xaxes(rangeslider_visible = False)
+
 
 ######
 fig1 = make_subplots(specs = [[{'secondary_y':True}]])
