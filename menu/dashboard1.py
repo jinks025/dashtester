@@ -74,7 +74,7 @@ SIDEBAR_STYLE1 = SIDEBAR_STYLE
 header = html.Div(children = [s])
 graphshere = html.Div(children = [graph1, first])
 indicators = html.Div(children = [second, thrid])
-comgraph = html.Div(children = [table1, table2], style = {'width':'35%','display':'inline-block'})
+comgraph = html.Div(children = [table1, table2], style = {'display':'inline-block'})
 
 kotak_utama1 = html.Div([
     header,
