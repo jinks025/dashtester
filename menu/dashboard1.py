@@ -6,8 +6,6 @@ from dash import dash_table
 import dash
 from menu.style import *
 from app import app, server
-import datetime
-from datetime import date
 import pandas as pd
 import numpy as np 
 import plotly.express as px
